@@ -1,7 +1,7 @@
 {
   "name": "vue-naver-map",
-  "version": "0.1.0",
-  "private": true,
+  "version": "0.1.2",
+  "private": false,
   "scripts": {
     "build:npm": "webpack --mode=production",
     "dev": "vue-cli-service serve",
@@ -35,12 +35,20 @@
   ],
   "description": "## Project setup ``` yarn install ```",
   "main": "bundle/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ManbokLee/vue-naver-map"
+  },
   "keywords": [
     "naver",
     "map"
   ],
   "author": {
     "name": "Manbok Lee",
+    "email": "dlakdks0@gmail.com"
+  },
+  "bugs": {
+    "url": "https://github.com/ManbokLee/vue-naver-map/issues",
     "email": "dlakdks0@gmail.com"
   },
   "license": "MIT"

@@ -5,7 +5,7 @@
         <v-btn @click="toggleMap" style="position: fixed; z-index: 9999;">Map toggle</v-btn>
         <NaverMap
           v-if="mapVisible"
-          :naver-key="process.env.VUE_APP_NAVER_KEY"
+          :naver-key="key"
           style="width: 100%; height: 100%;"
         >
           <NaverMapMarker :position="{ lat: 37.3467362, lng: 126.9641624 }" />
@@ -39,7 +39,8 @@ export default {
   name: 'App',
   data() {
     return {
-      mapVisible: true
+      mapVisible: true,
+      key: process.env.VUE_APP_NAVER_KEY
     }
   },
   methods: {
