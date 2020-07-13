@@ -28,6 +28,12 @@
 import Vue from 'vue'
 import VueNaverMap from 'vue-naver-map'
 Vue.use(VueNaverMap)
+
+<naver-map naver-key="[your key]" style="width: 100%; height: 100%;">
+  <naver-map-marker-cluster>
+    <naver-map-marker />
+  </naver-map-marker-cluster>
+</naver-map>
 ```
 
 ### 외부 라이브러리
