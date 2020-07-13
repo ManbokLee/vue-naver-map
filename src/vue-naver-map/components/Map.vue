@@ -58,6 +58,9 @@ export default {
   },
   methods: {
     loadMap() {
+      if (typeof window === 'undefined') {
+        return
+      }
       loadScript(
         `https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${
           this.naverKey
