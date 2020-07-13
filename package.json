@@ -1,6 +1,6 @@
 {
   "name": "vue-naver-map",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "private": false,
   "scripts": {
     "build:npm": "webpack --mode=production",
@@ -8,8 +8,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "load-script": "^1.0.0",
-    "vue-naver-map": "^0.1.5"
+    "load-script": "^1.0.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.4.0",
