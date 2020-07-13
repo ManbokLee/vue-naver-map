@@ -11,6 +11,7 @@
         <NaverMap
           v-if="mapVisible"
           :naver-key="key"
+          :zoom="10"
           style="width: 100%; height: 100%;"
         >
           <NaverMapMarker :position="{ lat: 37.3467362, lng: 126.9641624 }" />

@@ -57,29 +57,24 @@ export default {
     this.loadMap();
   },
   methods: {
-    loadMap() {
-      if (typeof window === 'undefined') {
+    async loadMap() {
+      const isSsr = await this.checkServer()
+      if (isSsr) {
         return
       }
       loadScript(
-        `https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${
-          this.naverKey
-        }&submodules=${this.libraries.join(",")}`,
-        (error, script) => {
+        `https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${this.naverKey}&submodules=${this.libraries.join(",")}`,
+        (error) => {
           if (error) {
             throw new Error(error);
           }
+          this.naver = window.naver
           this.loading = false;
           const mapOptions = {
-            center: new window.naver.maps.LatLng(37.3595704, 127.105399),
-            zoom: 10,
-            script: script,
-            mapTypeControl: false,
-            mapTypeControlOptions: {
-              style: window.naver.maps.MapTypeControlStyle.DROPDOWN,
-            },
+            ...this.options,
+            center: new this.naver.maps.LatLng(this.center.lat || 37.3595704, this.center.lng || 127.105399),
+            zoom: this.zoom
           };
-          this.naver = window.naver
           window.map = this.map = new this.naver.maps.Map(
             this.$refs.map,
             mapOptions
@@ -87,6 +82,9 @@ export default {
         }
       );
     },
+    checkServer() {
+      return typeof window === 'undefined'
+    }
   },
 };
 </script>
