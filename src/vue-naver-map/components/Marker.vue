@@ -44,6 +44,7 @@ export default {
         ),
         map: this.core.map,
       });
+      this.registerEvent();
     },
     insertCluster() {
       this.marker = new this.core.naver.maps.Marker({
@@ -57,6 +58,12 @@ export default {
         clearTimeout(this.core.map._debounceThing);
       }
       this.core.map._debounceThing = setTimeout(this.redrawCluster, 500);
+      this.registerEvent();
+    },
+    registerEvent () {
+      Object.keys(this.$listeners).forEach(key => {
+        this.core.naver.maps.Event.addListener(this.marker, key, this.$listeners[key])
+      });
     },
     redrawCluster() {
       this.cluster.clustering.setMap(this.cluster.clustering.getMap());
