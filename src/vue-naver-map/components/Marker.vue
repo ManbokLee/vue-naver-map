@@ -1,73 +1,73 @@
-
 <script>
 export default {
-    // inject: ['map', 'cluster'],
-    inject: {
-        map: {
-            type: Object,
-            required: true
-        },
-        cluster: {
-            type: [Object, Boolean],
-            default: false
-        }
+  inject: {
+    core: {
+      type: Object,
+      required: true,
     },
-    props: {
-        position: {
-            type: Object,
-            required: false,
-            default: () => ({ lat: 37.3377362, lng: 126.9941624 })
-        }
+    cluster: {
+      type: [Object, Boolean],
+      default: false,
     },
-    data() {
-        return {
-            marker: null,
-            debounceCheck: null
-        }
+  },
+  props: {
+    position: {
+      type: Object,
+      required: false,
+      default: () => ({ lat: 37.3377362, lng: 126.9941624 }),
     },
-    created () {
-        this.createMarker ()
+  },
+  data() {
+    return {
+      marker: null,
+    };
+  },
+  created() {
+    this.createMarker();
+  },
+  beforeDestroy() {
+    this.destroyMarker();
+  },
+  methods: {
+    createMarker() {
+      if (!this.core.map) {
+        throw new Error("Map loading is not finish.");
+      }
+      if (this.cluster) {
+        this.insertCluster();
+        return;
+      }
+      this.marker = new this.core.naver.maps.Marker({
+        position: new this.core.naver.maps.LatLng(
+          this.position.lat,
+          this.position.lng
+        ),
+        map: this.core.map,
+      });
     },
-    beforeDestroy () {
-        this.destroyMarker ()
+    insertCluster() {
+      this.marker = new this.core.naver.maps.Marker({
+        position: new this.core.naver.maps.LatLng(
+          this.position.lat,
+          this.position.lng
+        ),
+      });
+      this.cluster.clustering.markers.push(this.marker)
+      if (this.core.map._debounceThing) {
+        clearTimeout(this.core.map._debounceThing);
+      }
+      this.core.map._debounceThing = setTimeout(this.redrawCluster, 500);
     },
-    methods: {
-       createMarker () {
-           if (!this.map.map) {
-               throw new Error('map loading is not finish.')
-           }
-           if (this.cluster) {
-                this.insertCluster()
-                return
-           }
-           this.marker = new window.naver.maps.Marker({
-               position: new window.naver.maps.LatLng(this.position.lat, this.position.lng),
-               map: window.map
-           })
-       },
-       insertCluster() {
-            this.marker = new window.naver.maps.Marker({
-                position: new window.naver.maps.LatLng(this.position.lat, this.position.lng),
-            })
-            this.cluster.cluster.setMarkers([...this.cluster.cluster.markers, this.marker])
-            if (this.map.map._debounceThing) {
-                clearTimeout(this.map.map._debounceThing);
-            }
-            this.map.map._debounceThing = setTimeout(
-                this.redrawCluster,
-                500
-            )
-       },
-       redrawCluster () {
-            this.cluster.cluster.setMap(this.cluster.cluster.getMap())
-       },
-       destroyMarker () {
-           this.marker.setMap(null)
-           this.marker = null
-       }
+    redrawCluster() {
+      this.cluster.clustering.setMap(this.cluster.clustering.getMap());
     },
-    render() {
-        return {}
-    }
-}
+    destroyMarker() {
+      this.marker.setMap(null);
+      this.marker = null;
+    },
+  },
+  render() {
+    return {};
+  },
+};
 </script>

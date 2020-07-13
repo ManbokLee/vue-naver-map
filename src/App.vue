@@ -2,7 +2,12 @@
   <v-app>
     <v-main>
       <v-container class="fill-height pa-0 align-start">
-        <v-btn @click="toggleMap" style="position: fixed; z-index: 9999;">Map toggle</v-btn>
+        <v-btn
+          style="position: fixed; z-index: 9999;"
+          @click="toggleMap"
+        >
+          Map toggle
+        </v-btn>
         <NaverMap
           v-if="mapVisible"
           :naver-key="key"
@@ -19,12 +24,11 @@
             <NaverMapMarker :position="{ lat: 37.3517362, lng: 126.9641624 }" />
             <NaverMapMarker :position="{ lat: 37.3527362, lng: 126.9641624 }" />
             <NaverMapMarker 
-              v-for="n in 100"
+              v-for="n in 1000"
               :key="n"
               :position="{ lat: (37 + n * 0.001), lng: 126.9641624 }"
             />
           </NaverMapMarkerCluster>
-          
         </NaverMap>
         <div v-else>
           Map is hidden

@@ -1,3 +1,4 @@
+const webpack = require('webpack');
 const path = require('path');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
@@ -11,10 +12,13 @@ module.exports = {
   },
   module: {
     rules: [
-      { test: /\.vue$/, use: 'vue-loader' },
+      { test: /\.vue$/, use: 'vue-loader' }
     ]
   },
   plugins: [
     new VueLoaderPlugin(),
+    new webpack.optimize.LimitChunkCountPlugin({
+      maxChunks: 1, // disable creating additional chunks
+    })
   ]
 }
