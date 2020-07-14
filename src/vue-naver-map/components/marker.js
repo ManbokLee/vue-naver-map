@@ -10,15 +10,18 @@ export default {
     },
   },
   props: {
-    position: {
+    options: {
       type: Object,
       required: false,
-      default: () => ({ lat: 37.3377362, lng: 126.9941624 }),
-    },
+      default: () => ({
+        position: { lat: 37.3377362, lng: 126.9941624 }
+      }),
+    }
   },
   data() {
     return {
       marker: null,
+      markerOptions: null
     };
   },
   created() {
@@ -36,28 +39,51 @@ export default {
         this.insertCluster();
         return;
       }
-      this.marker = new this.core.naver.maps.Marker({
-        position: new this.core.naver.maps.LatLng(
-          this.position.lat,
-          this.position.lng
-        ),
-        map: this.core.map,
-      });
+      this.setMarker()
+      this.marker.setMap(this.core.map)
       this.registerEvent();
     },
     insertCluster() {
-      this.marker = new this.core.naver.maps.Marker({
-        position: new this.core.naver.maps.LatLng(
-          this.position.lat,
-          this.position.lng
-        ),
-      });
+      this.setMarker()
       this.cluster.clustering.markers.push(this.marker)
       if (this.core.map._debounceThing) {
         clearTimeout(this.core.map._debounceThing);
       }
-      this.core.map._debounceThing = setTimeout(this.redrawCluster, 500);
+      this.core.map._debounceThing = setTimeout(this.redrawCluster, 100);
       this.registerEvent();
+    },
+    setMarker() {
+      this.markerOptions = { ...this.options }
+      this.markerOptions.position = new this.core.naver.maps.LatLng(
+        this.options.position.lat,
+        this.options.position.lng
+      )
+      Object.keys(this.options).forEach(option => {
+        if (typeof this.options[option] === 'object') {
+          if (this.options[option].size) {
+            this.markerOptions[option].size = this.core.naver.maps.Size(this.options[option].size.width, this.options[option].size.height)
+          }
+          if (this.options[option].scaledSize) {
+            this.markerOptions[option].scaledSize = this.core.naver.maps.Size(this.options[option].scaledSize.width, this.options[option].scaledSize.height)
+          }
+          if (this.options[option].origin) {
+            this.markerOptions[option].origin = this.core.naver.maps.Point(this.options[option].origin.x, this.options[option].origin.y)
+          }
+          if (this.options[option].anchor) {
+            this.markerOptions[option].anchor = this.core.naver.maps.Point(this.options[option].anchor.x, this.options[option].anchor.y)
+          }
+        }
+      })
+      if (this.options.icon && typeof this.options.icon === 'object' && this.options.icon.path) {
+        this.markerOptions.icon.path = this.options.icon.path.reduce((acc, cur) => {
+          acc.push(this.core.naver.maps.Point(cur.x, cur.y))
+          return acc
+        }, [])
+      }
+      if (this.options.animation) {
+        this.markerOptions.animation = this.core.naver.maps.Animation[this.options.animation]
+      }
+      this.marker = new this.core.naver.maps.Marker(this.markerOptions);
     },
     registerEvent () {
       Object.keys(this.$listeners).forEach(key => {
@@ -73,6 +99,6 @@ export default {
     },
   },
   render() {
-    return {};
+    return;
   },
 };
