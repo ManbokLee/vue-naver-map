@@ -23,17 +23,47 @@
  - 크로스브라우징 테스트
 ```
 
-### package use
-```
+### Use
+```javascript
+// main.js
 import Vue from 'vue'
 import VueNaverMap from 'vue-naver-map'
 Vue.use(VueNaverMap)
-
+```
+```html
+<!-- in component -->
 <naver-map naver-key="[your key]" style="width: 100%; height: 100%;">
   <naver-map-marker-cluster>
     <naver-map-marker />
   </naver-map-marker-cluster>
 </naver-map>
+```
+
+### Use Nuxt
+```javascript
+ // nuxt.config.js
+ ...
+ plugins: [
+   ...
+    '~/plugins/naverMap.client.js'
+  ],
+...
+```
+```javascript
+// plugins/naverMap.client.js
+import Vue from 'vue'
+import VueNaverMap from 'vue-naver-map'
+Vue.use(VueNaverMap)
+```
+```html
+<!-- in component -->
+<client-only>
+  <naver-map naver-key="[your key]" style="width: 100%; height: 100%;">
+    <naver-map-marker-cluster>
+      <naver-map-marker />
+    </naver-map-marker-cluster>
+  </naver-map>
+</client-only>
 ```
 
 ### 외부 라이브러리
@@ -43,4 +73,10 @@ Naver map MarkerClustering.js (Apache License 2.0)
  - 수정사항:
    - 모듈화하여 사용하기위해 해당 라이브러리를 export 할 수 있게 수정.
    - 기타 변경점 없음.
+```
+
+
+### 업데이트 로그
+```
+2020.07.14 @babel/preset-env 적용
 ```

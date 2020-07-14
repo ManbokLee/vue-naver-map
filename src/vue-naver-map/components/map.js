@@ -1,16 +1,4 @@
-<template>
-  <div>
-    <div
-      ref="map"
-      class="map"
-      style="width: 100%; height: 100%;"
-    >
-      <slot v-if="!loading" />
-    </div>
-  </div>
-</template>
 
-<script>
 import loadScript from "load-script";
 
 export default {
@@ -86,5 +74,18 @@ export default {
       return typeof window === 'undefined'
     }
   },
+  render: function (createElement) {
+    return createElement(
+        'div',
+        {
+          ref: 'map',
+          style: {
+            width: '100%',
+            height: '100%'
+          },
+          class: ['map']
+        },
+        !this.loading ? this.$slots.default : null
+      );
+  }
 };
-</script>

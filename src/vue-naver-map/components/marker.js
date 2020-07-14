@@ -1,4 +1,3 @@
-<script>
 export default {
   inject: {
     core: {
@@ -77,4 +76,3 @@ export default {
     return {};
   },
 };
-</script>

@@ -1,6 +1,6 @@
-import NaverMap from "./components/Map.vue";
-import NaverMapMarker from "./components/Marker.vue";
-import NaverMapMarkerCluster from "./components/Cluster.vue";
+import NaverMap from "./components/map";
+import NaverMapMarker from "./components/marker";
+import NaverMapMarkerCluster from "./components/cluster";
 
 export { NaverMap, NaverMapMarker, NaverMapMarkerCluster };
 

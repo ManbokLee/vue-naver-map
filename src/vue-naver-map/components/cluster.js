@@ -1,8 +1,3 @@
-<template>
-  <div><slot v-if="!loading" /></div>
-</template>
-
-<script>
 export default {
   provide() {
     const cluster = {};
@@ -109,5 +104,10 @@ export default {
       ];
     },
   },
+  render: function(createElement) {
+    return createElement(
+      'div',
+      !this.loading ? this.$slots.default : null
+    );
+  }
 };
-</script>
