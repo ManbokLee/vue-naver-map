@@ -195,7 +195,6 @@ export default {
 <!-- in component -->
 <naver-map
   ref="map"
-  :naver-key="key"
   :zoom="10"
   style="width: 100%; height: 100%;"
 >
@@ -224,5 +223,5 @@ Naver map MarkerClustering.js (Apache License 2.0)
 2020.07.14 @babel/preset-env 적용
 2020.07.14 마커 옵션, 이벤트 바인딩 적용
 2020.07.16 라이브러리 호출을 위한 키와 서비스를 모듈 실행부분으로 변경(맵로딩하지 않아도 this.$navers.naver 으로 라이브러리 접근 가능)
-2020.07.16 맵화면에 이벤트 바인딩 적용
+2020.07.16 맵 컴포넌트의 이벤트 바인딩 적용
 ```
