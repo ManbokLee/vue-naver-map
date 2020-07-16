@@ -1,6 +1,6 @@
 {
   "name": "vue-naver-map",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "private": false,
   "scripts": {
     "build:npm": "webpack --mode=production",

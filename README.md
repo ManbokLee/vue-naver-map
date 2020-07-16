@@ -24,7 +24,7 @@ Vue.use(VueNaverMap, {
 ```javascript
 // Case geocode 
 this.$navers.naver.maps.Service.geocode({ query: '덕수궁길 15' }, function(status, response) {
-    if (status === naver.maps.Service.Status.ERROR) {
+    if (status === this.$navers.naver.maps.Service.Status.ERROR) {
         return alert('Something wrong!');
     }
     console.log(response)
