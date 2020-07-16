@@ -24,12 +24,6 @@ export default {
       markerOptions: null
     };
   },
-  // watch: {
-  //   options() {
-  //       this.destroyMarker();
-  //       this.createMarker();
-  //   }
-  // },
   created() {
     this.createMarker();
   },
@@ -100,9 +94,6 @@ export default {
       this.cluster.clustering.setMap(this.cluster.clustering.getMap());
     },
     destroyMarker() {
-      // if (this.cluster) {
-      //   this.cluster.clustering.removeMarker(this.marker)
-      // }
       this.marker.setMap(null);
       this.marker = null;
     },
