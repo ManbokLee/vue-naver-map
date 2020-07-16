@@ -14,9 +14,9 @@
         <NaverMap
           v-if="mapVisible"
           ref="map"
-          :naver-key="key"
           :zoom="10"
           style="width: 100%; height: 100%;"
+          @click="handlerMapclick"
         >
           <NaverMapMarker />
           <NaverMapMarker :options="markerOptions.imageIcon" />
@@ -37,6 +37,12 @@
               }"
             />
           </NaverMapMarkerCluster>
+          <NaverMapMarker 
+            v-for="marker in additionalMarkers"
+            :key="`added-marker-${marker.key}`"
+            :options="marker.options"
+            @click="removeAddedMarker(marker)"
+          />
         </NaverMap>
         <div v-else>
           Map is hidden
@@ -61,8 +67,8 @@ export default {
     return {
       dialogVisible: false,
       mapVisible: true,
-      key: process.env.VUE_APP_NAVER_KEY,
       mapScale: 0.5,
+      additionalMarkers: [],
       markerOptions: {
         imageIcon: {
           position: { lat: 37.2067362, lng: 126.9841624 },
@@ -122,6 +128,17 @@ export default {
     toggleScale() {
       this.mapScale = this.mapScale === 0.5 ? 2 : 0.5
       this.$refs.map.map.setScale(this.mapScale)
+    },
+    handlerMapclick(event) {
+      this.additionalMarkers.push({
+        options: {
+          position: event.coord
+        },
+        key: Math.random()
+      })
+    },
+    removeAddedMarker(marker) {
+      this.additionalMarkers = this.additionalMarkers.filter(addedMarker => addedMarker.key !== marker.key)
     }
   }
 };

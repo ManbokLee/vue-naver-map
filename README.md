@@ -2,38 +2,50 @@
  
  > [네이버 맵 API](https://navermaps.github.io/maps.js.ncp/docs/index.html)의 기본 기능(맵, 마커, 클러스터)을 사용할 수 있습니다. 네이버 맵, 마커 및 클러스터를 컴포넌트로 사용할 수 있으며 각 객체에 접근하려면 선언된 엘리먼트의 ref를 사용해서 접근 가능합니다. 접근성, 편의성을 체크해서 개발중인 상태입니다.
 
-### 상태 BETA
-```
-구현 된 Feature
- - 컴포넌트 구조를 사용한 맵 과 마커 뷰
- - 마커 클러스터를 컴포넌트 구조에 포함시킴 (<map><cluster><marker /><marker />...</cluster></map>)
- - 마커 옵션, 이벤트 적용
- - 크로스브라우징 테스트
- - 맵, 클러스터, 마커 객체를 반환시켜서 사용자가 커스텀 할 수 있게 적용
-```
-
-### 남은 Feature
-```
- - 마커 - 클러스터 성능 테스트
- - 네이버 키를 옵션으로 받게 수정
- - 네이버 라이브러리를 지도 로딩전에 사용할 수 있게 적용
- - 적용되지 않은 라이브러리 적용
-```
-
 ### Use
 ```javascript
 // main.js
 import Vue from 'vue'
 import VueNaverMap from 'vue-naver-map'
-Vue.use(VueNaverMap)
+Vue.use(VueNaverMap, {
+  key: /* your key, type: String */,
+  libraries: ['geocoder'] /* type: Array */
+})
 ```
 ```html
 <!-- in component -->
-<naver-map naver-key="[your key]" style="width: 100%; height: 100%;">
+<naver-map style="width: 100%; height: 100%;">
   <naver-map-marker-cluster>
     <naver-map-marker />
   </naver-map-marker-cluster>
 </naver-map>
+```
+#### Use Naver map service
+```javascript
+// Case geocode 
+this.$navers.naver.maps.Service.geocode({ query: '덕수궁길 15' }, function(status, response) {
+    if (status === naver.maps.Service.Status.ERROR) {
+        return alert('Something wrong!');
+    }
+    console.log(response)
+});
+```
+#### Event binding on Map [참고](https://github.com/ManbokLee/vue-naver-map/blob/master/src/App.vue)
+```html
+<!-- in component -->
+<naver-map style="width: 100%; height: 100%;" @click="handlerClickMap">
+  ...
+</naver-map>
+```
+```javascript
+/// map event binding
+...
+methods: {
+  handlerClickMap(event) {
+    console.log(event)
+  }
+}
+...
 ```
 
 ### Use Nuxt
@@ -50,12 +62,15 @@ Vue.use(VueNaverMap)
 // plugins/naverMap.client.js
 import Vue from 'vue'
 import VueNaverMap from 'vue-naver-map'
-Vue.use(VueNaverMap)
+Vue.use(VueNaverMap, {
+  key: /* your key, type: String */,
+  libraries: ['geocoder'] /* type: Array */
+})
 ```
 ```html
 <!-- in component -->
 <client-only>
-  <naver-map naver-key="[your key]" style="width: 100%; height: 100%;">
+  <naver-map style="width: 100%; height: 100%;">
     <naver-map-marker-cluster>
       <naver-map-marker />
     </naver-map-marker-cluster>
@@ -67,7 +82,6 @@ Vue.use(VueNaverMap)
 ```html
 <!-- in component -->
 <naver-map
-  :naver-key="[your key]"
   :zoom="10"
   style="width: 100%; height: 100%;"
 >
@@ -208,5 +222,7 @@ Naver map MarkerClustering.js (Apache License 2.0)
 ### 업데이트 로그
 ```
 2020.07.14 @babel/preset-env 적용
-2020.07.14 마커 옵션, 이벤트 적용
+2020.07.14 마커 옵션, 이벤트 바인딩 적용
+2020.07.16 라이브러리 호출을 위한 키와 서비스를 모듈 실행부분으로 변경(맵로딩하지 않아도 this.$navers.naver 으로 라이브러리 접근 가능)
+2020.07.16 맵화면에 이벤트 바인딩 적용
 ```

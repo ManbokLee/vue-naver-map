@@ -1,3 +1,4 @@
+import { imortMarkerclustering } from '../utils'
 export default {
   provide() {
     const cluster = {};
@@ -16,49 +17,57 @@ export default {
   props: {
     options: {
       type: Object,
-      default: () => ({}),
+      default: () => ({
+        markers: [],
+        minClusterSize: 1,
+        maxZoom: 17,
+        disableClickZoom: false,
+        gridSize: 120
+      }),
     },
   },
   data() {
     return {
+      clustering: null,
       cluster: null,
       loading: true,
     };
   },
   created() {
-    this.createCluster();
+    this.loadcluster();
   },
   beforeDestroy() {
     this.destroyCluster();
   },
   methods: {
-    async createCluster() {
+    async loadcluster() {
       if (!this.core.map) {
         throw new Error("Map loading is not finish.");
       }
-      import("../lib/markerClustering.js").then((script) => {
-        this.cluster = new script.default({
-          map: this.core.map,
-          markers: [],
-          minClusterSize: this.getOption("minClusterSize", 1),
-          maxZoom: this.getOption("maxZoom", 20),
-          disableClickZoom: this.getOption("disableClickZoom"),
-          gridSize: this.getOption("gridSize", 120),
-          icons: this.getOption("icons", this.getDefaultIcons()),
-          indexGenerator: this.getOption("indexGenerator", [
-            10,
-            100,
-            200,
-            500,
-            1000,
-          ]),
-          stylingFunction: this.getOption(
-            "stylingFunction",
-            this.getDefaultStylingFunction()
-          ),
-        });
-        this.loading = false;
+      if (!this.$navers.clustering) {
+        await imortMarkerclustering(this.$navers)
+      }
+      this.clustering = this.$navers.clustering
+      this.createCluster()
+    },
+    createCluster() {
+      this.cluster = new this.clustering({
+        ...this.options,
+        map: this.core.map,
+        icons: this.getOption("icons", this.getDefaultIcons()),
+        indexGenerator: this.getOption("indexGenerator", [
+          10,
+          100,
+          200,
+          500,
+          1000,
+        ]),
+        stylingFunction: this.getOption(
+          "stylingFunction",
+          this.getDefaultStylingFunction()
+        ),
       });
+      this.loading = false;
     },
     destroyCluster() {
       this.cluster.setMap(null);

@@ -3,7 +3,10 @@ import App from './App.vue'
 import vuetify from './plugins/vuetify'
 
 import VueNaverMap from './vue-naver-map'
-Vue.use(VueNaverMap)
+Vue.use(VueNaverMap, {
+  key: process.env.VUE_APP_NAVER_KEY,
+  libraries: ['geocoder']
+})
 
 Vue.config.productionTip = false
 

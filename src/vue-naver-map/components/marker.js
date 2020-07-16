@@ -24,6 +24,12 @@ export default {
       markerOptions: null
     };
   },
+  // watch: {
+  //   options() {
+  //       this.destroyMarker();
+  //       this.createMarker();
+  //   }
+  // },
   created() {
     this.createMarker();
   },
@@ -55,8 +61,8 @@ export default {
     setMarker() {
       this.markerOptions = { ...this.options }
       this.markerOptions.position = new this.core.naver.maps.LatLng(
-        this.options.position.lat,
-        this.options.position.lng
+        this.options.position.y || this.options.position.lat,
+        this.options.position.x || this.options.position.lng
       )
       Object.keys(this.options).forEach(option => {
         if (typeof this.options[option] === 'object') {
@@ -94,6 +100,9 @@ export default {
       this.cluster.clustering.setMap(this.cluster.clustering.getMap());
     },
     destroyMarker() {
+      // if (this.cluster) {
+      //   this.cluster.clustering.removeMarker(this.marker)
+      // }
       this.marker.setMap(null);
       this.marker = null;
     },
