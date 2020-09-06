@@ -17,6 +17,8 @@
           :zoom="10"
           style="width: 100%; height: 100%;"
           @click="handlerMapclick"
+          @idle="idle"
+          @dragend="dragend"
         >
           <NaverMapMarker />
           <NaverMapMarker :options="markerOptions.imageIcon" />
@@ -130,12 +132,20 @@ export default {
       this.$refs.map.map.setScale(this.mapScale)
     },
     handlerMapclick(event) {
-      this.additionalMarkers.push({
-        options: {
-          position: event.coord
-        },
-        key: Math.random()
-      })
+      if (event && event.coord) {
+        this.additionalMarkers.push({
+          options: {
+            position: event.coord
+          },
+          key: Math.random()
+        })
+      }
+    },
+    idle(event) {
+      console.log('event', event)
+    },
+    dragend(event) {
+      console.log('dragend', event)
     },
     removeAddedMarker(marker) {
       this.additionalMarkers = this.additionalMarkers.filter(addedMarker => addedMarker.key !== marker.key)
