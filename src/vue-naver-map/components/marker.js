@@ -101,14 +101,17 @@ export default {
       this.marker = null
     },
     removeMarkerInCluster () {
-      this.cluster.clustering.markers = this.cluster.clustering.markers.filter(marker => marker !== this.marker)
-      // const existMarkers = this.cluster.clustering.getMarkers()
-      // const insertMarkers = existMarkers.filter(marker => marker !== this.marker)
-      // this.cluster.clustering.setMarkers(insertMarkers)
-      this.redrawCluster()
+      try {
+        if (this.cluster && this.cluster.clustering) {
+          this.cluster.clustering.markers = this.cluster.clustering.markers.filter(marker => marker !== this.marker)
+          this.redrawCluster()
+        }
+      } catch (error) {
+        //
+      }
     }
   },
   render () {
-
+    return null
   }
 }
