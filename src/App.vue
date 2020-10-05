@@ -13,7 +13,7 @@
         
         <NaverMap
           v-if="mapVisible"
-          ref="map"
+          ref="maps"
           :zoom="10"
           style="width: 100%; height: 100%;"
           @click="handlerMapclick"
@@ -21,7 +21,10 @@
           @dragend="dragend"
         >
           <NaverMapMarker />
-          <NaverMapMarker :options="markerOptions.imageIcon" />
+          <NaverMapMarker 
+            :options="markerOptions.imageIcon" 
+            @click="changeMarkerIcon(markerOptions.imageIcon)" 
+          />
           <NaverMapMarker :options="markerOptions.imageIconScaledSize" />
           <NaverMapMarker
             :options="markerOptions.html"
@@ -73,6 +76,7 @@ export default {
       additionalMarkers: [],
       markerOptions: {
         imageIcon: {
+          id: 777,
           position: { lat: 37.2067362, lng: 126.9841624 },
           icon: '/favicon.ico' 
         },
@@ -129,7 +133,7 @@ export default {
     },
     toggleScale() {
       this.mapScale = this.mapScale === 0.5 ? 2 : 0.5
-      this.$refs.map.map.setScale(this.mapScale)
+      this.$refs.maps.map.setScale(this.mapScale)
     },
     handlerMapclick(event) {
       if (event && event.coord) {
@@ -149,6 +153,15 @@ export default {
     },
     removeAddedMarker(marker) {
       this.additionalMarkers = this.additionalMarkers.filter(addedMarker => addedMarker.key !== marker.key)
+    },
+    changeMarkerIcon(markerOption) {
+      const target = this.$refs.maps.map.getMarkerByKey(markerOption, 'id')
+      // available -> const target = this.$refs.maps.map.getMarkerByKey(markerOption) // id is default key
+      if (target.icon === '/favicon.ico') {
+        target.setIcon(this.markerOptions.html.icon)
+      } else {
+        target.setIcon('/favicon.ico')
+      }
     }
   }
 };

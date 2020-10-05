@@ -10,6 +10,9 @@ export default {
     Object.defineProperty(core, 'naver', {
       get: () => this.naver
     })
+    Object.defineProperty(core, 'data', {
+      get: () => this.data
+    })
     return { core }
   },
   props: {
@@ -38,6 +41,9 @@ export default {
     return {
       map: null,
       naver: null,
+      data: {
+        markers: [],
+      },
       loading: true,
       key: this.$navers.key || this.naverKey,
       libs: this.$navers.libraries.length ? this.$navers.libraries : this.libraries
@@ -81,7 +87,17 @@ export default {
         this.$refs.map,
         mapOptions
       )
+      this.map.markers = []
       this.registerEvent()
+      this.registerFunction()
+    },
+    registerFunction() {
+      this.map.getMarker = (target) => {
+        return this.data.markers.find(marker => marker === target)
+      }
+      this.map.getMarkerByKey = (target, key = 'id') => {
+        return this.data.markers.find(marker => marker[key] === target[key])
+      }
     },
     checkServer () {
       return typeof window === 'undefined'

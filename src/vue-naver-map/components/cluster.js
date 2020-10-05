@@ -67,6 +67,7 @@ export default {
           this.getDefaultStylingFunction()
         )
       })
+      this.core.map.cluster = this.cluster
       this.loading = false
     },
     destroyCluster () {

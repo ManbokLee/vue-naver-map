@@ -84,6 +84,7 @@ export default {
         this.markerOptions.animation = this.core.naver.maps.Animation[this.options.animation]
       }
       this.marker = new this.core.naver.maps.Marker(this.markerOptions)
+      this.core.data.markers.push(this.marker)
     },
     registerEvent () {
       Object.keys(this.$listeners).forEach((key) => {
@@ -97,6 +98,7 @@ export default {
       if (this.cluster) {
         this.removeMarkerInCluster()
       }
+      this.core.data.markers = this.core.data.markers.filter(marker => marker !== this.marker)
       this.marker.setMap(null)
       this.marker = null
     },
