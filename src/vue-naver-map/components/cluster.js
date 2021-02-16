@@ -22,7 +22,8 @@ export default {
         minClusterSize: 1,
         maxZoom: 17,
         disableClickZoom: false,
-        gridSize: 120
+        gridSize: 120,
+        class: 'cluster'
       }),
     },
   },
@@ -84,29 +85,31 @@ export default {
       };
     },
     getDefaultIcons() {
+      const customClass = this.getOption('class', 'cluster')
+      const defaultStyles = 'cursor:pointer;width:40px;height:40px;line-height:42px;font-size:10px;color:black;text-align:center;font-weight:bold;border-radius:20px;'
       return [
         {
-          content: `<div style="cursor:pointer;width:40px;height:40px;line-height:42px;font-size:10px;color:black;text-align:center;font-weight:bold;background-color: #adffb3;border-radius:20px;"></div>`,
+          content: `<div style="${defaultStyles}background-color: #adffb3;" class="${customClass} lv1"></div>`,
           size: this.core.naver.maps.Size(40, 40),
           anchor: this.core.naver.maps.Point(20, 20),
         },
         {
-          content: `<div style="cursor:pointer;width:40px;height:40px;line-height:42px;font-size:10px;color:black;text-align:center;font-weight:bold;background-color: #75ff7f;border-radius:20px;"></div>`,
+          content: `<div style="${defaultStyles}background-color: #75ff7f;" class="${customClass} lv2"></div>`,
           size: this.core.naver.maps.Size(40, 40),
           anchor: this.core.naver.maps.Point(20, 20),
         },
         {
-          content: `<div style="cursor:pointer;width:40px;height:40px;line-height:42px;font-size:10px;color:black;text-align:center;font-weight:bold;background-color: #1dff2d;border-radius:20px;"></div>`,
+          content: `<div style="${defaultStyles}background-color: #1dff2d;" class="${customClass} lv3"></div>`,
           size: this.core.naver.maps.Size(40, 40),
           anchor: this.core.naver.maps.Point(20, 20),
         },
         {
-          content: `<div style="cursor:pointer;width:40px;height:40px;line-height:42px;font-size:10px;color:black;text-align:center;font-weight:bold;background-color: #e7ff1d;border-radius:20px;"></div>`,
+          content: `<div style="${defaultStyles}background-color: #e7ff1d;" class="${customClass} lv4"></div>`,
           size: this.core.naver.maps.Size(40, 40),
           anchor: this.core.naver.maps.Point(20, 20),
         },
         {
-          content: `<div style="cursor:pointer;width:40px;height:40px;line-height:42px;font-size:10px;color:black;text-align:center;font-weight:bold;background-color: #ffa51d;border-radius:20px;"></div>`,
+          content: `<div style="${defaultStyles}background-color: #ffa51d;" class="${customClass} lv5"></div>`,
           size: this.core.naver.maps.Size(40, 40),
           anchor: this.core.naver.maps.Point(20, 20),
         },
