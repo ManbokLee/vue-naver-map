@@ -1,63 +1,69 @@
 
-import loadScript from "load-script";
+import loadScript from 'load-script'
 
 export default {
-  provide() {
-    const core = {};
-    Object.defineProperty(core, "map", {
-      get: () => this.map,
-    });
-    Object.defineProperty(core, "naver", {
-      get: () => this.naver,
-    });
-    return { core };
+  provide () {
+    const core = {}
+    Object.defineProperty(core, 'map', {
+      get: () => this.map
+    })
+    Object.defineProperty(core, 'naver', {
+      get: () => this.naver
+    })
+    Object.defineProperty(core, 'data', {
+      get: () => this.data
+    })
+    return { core }
   },
   props: {
     naverKey: {
       type: String,
-      default: "",
+      default: ''
     },
     center: {
       type: Object,
-      default: () => ({}),
+      default: () => ({})
     },
     zoom: {
       type: Number,
-      default: 10,
+      default: 10
     },
     libraries: {
       type: Array,
-      default: () => [],
+      default: () => []
     },
     options: {
       type: Object,
-      default: () => ({}),
+      default: () => ({})
     }
   },
-  data() {
+  data () {
     return {
       map: null,
       naver: null,
+      data: {
+        markers: [],
+      },
       loading: true,
       key: this.$navers.key || this.naverKey,
       libs: this.$navers.libraries.length ? this.$navers.libraries : this.libraries
-    };
+    }
   },
-  created() {
-    this.checkDeprecation();
-    this.loadMap();
+  created () {
+    this.checkDeprecation()
+    this.loadMap()
   },
-  beforeDestroy() {
+  beforeDestroy () {
     this.map.destroy()
   },
   methods: {
-    checkDeprecation() {
+    checkDeprecation () {
       if (this.naverKey) {
         console.log(this.$navers.key)
         console.warn('[vue-naver-map] NaverKey in Map component is deprecation, use options.key in module insert. more info: https://www.npmjs.com/package/vue-naver-map')
       }
     },
-    loadMap() {
+    loadMap () {
       if (this.checkServer()) {
         return
       }
@@ -69,54 +75,64 @@ export default {
         this.loadNaverMapLib()
       }
     },
-    createMap() {
+    createMap () {
       this.naver = this.$navers.naver
-      this.loading = false;
+      this.loading = false
       const mapOptions = {
         ...this.options,
         center: new this.naver.maps.LatLng(this.center.lat || 37.3595704, this.center.lng || 127.105399),
         zoom: this.zoom
-      };
+      }
       this.map = new this.naver.maps.Map(
         this.$refs.map,
         mapOptions
-      );
+      )
+      this.map.markers = []
       this.registerEvent()
+      this.registerFunction()
     },
-    checkServer() {
+    registerFunction() {
+      this.map.getMarker = (target) => {
+        return this.data.markers.find(marker => marker === target)
+      }
+      this.map.getMarkerByKey = (target, key = 'id') => {
+        return this.data.markers.find(marker => marker[key] === target[key])
+      }
+    },
+    checkServer () {
       return typeof window === 'undefined'
     },
-    loadNaverMapLib() {
+    loadNaverMapLib () {
       const key = this.naverKey || this.$navers.key
       const libraries = this.libraries.length ? this.libraries : this.$navers.libraries
       loadScript(
-        `https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${key}&submodules=${libraries.join(",")}`,
+        `https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${key}&submodules=${libraries.join(',')}`,
         (error) => {
           if (error) {
-            throw new Error(error);
+            throw new Error(error)
           }
           this.$navers.naver = window.naver
           this.createMap()
         }
-      );
+      )
     },
     registerEvent () {
-      Object.keys(this.$listeners).forEach(key => {
+      Object.keys(this.$listeners).forEach((key) => {
         this.naver.maps.Event.addListener(this.map, key, this.$listeners[key])
-      });
+      })
     }
   },
-  render: function (createElement) {
+  render (createElement) {
     return createElement(
-        'div',
-        {
-          ref: 'map',
-          style: {
-            width: '100%',
-            height: '100%'
-          }
-        },
-        !this.loading ? this.$slots.default : null
-      );
+      'div',
+      {
+        ref: 'map',
+        style: {
+          width: '100%',
+          height: '100%'
+        }
+      },
+      !this.loading ? this.$slots.default : null
+    )
   }
-};
+}

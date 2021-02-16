@@ -1,18 +1,18 @@
 import { imortMarkerclustering } from '../utils'
 export default {
-  provide() {
-    const cluster = {};
-    Object.defineProperty(cluster, "clustering", {
+  provide () {
+    const cluster = {}
+    Object.defineProperty(cluster, 'clustering', {
       enumerable: true,
-      get: () => this.cluster,
-    });
-    return { cluster };
+      get: () => this.cluster
+    })
+    return { cluster }
   },
   inject: {
     core: {
       type: Object,
-      required: true,
-    },
+      required: true
+    }
   },
   props: {
     options: {
@@ -25,64 +25,65 @@ export default {
         gridSize: 120,
         class: 'cluster'
       }),
-    },
+    }
   },
-  data() {
+  data () {
     return {
-      clustering: null,
+      Clustering: null,
       cluster: null,
-      loading: true,
-    };
+      loading: true
+    }
   },
-  created() {
-    this.loadcluster();
+  created () {
+    this.loadcluster()
   },
-  beforeDestroy() {
-    this.destroyCluster();
+  beforeDestroy () {
+    this.destroyCluster()
   },
   methods: {
-    async loadcluster() {
+    async loadcluster () {
       if (!this.core.map) {
-        throw new Error("Map loading is not finish.");
+        throw new Error('Map loading is not finish.')
       }
       if (!this.$navers.clustering) {
         await imortMarkerclustering(this.$navers)
       }
-      this.clustering = this.$navers.clustering
+      this.Clustering = this.$navers.clustering
       this.createCluster()
     },
-    createCluster() {
-      this.cluster = new this.clustering({
+    createCluster () {
+      this.cluster = new this.Clustering({
         ...this.options,
         map: this.core.map,
-        icons: this.getOption("icons", this.getDefaultIcons()),
-        indexGenerator: this.getOption("indexGenerator", [
+        icons: this.getOption('icons', this.getDefaultIcons()),
+        indexGenerator: this.getOption('indexGenerator', [
           10,
           100,
           200,
           500,
-          1000,
+          1000
         ]),
         stylingFunction: this.getOption(
-          "stylingFunction",
+          'stylingFunction',
           this.getDefaultStylingFunction()
-        ),
-      });
-      this.loading = false;
+        )
+      })
+      this.core.map.cluster = this.cluster
+      this.loading = false
     },
-    destroyCluster() {
-      this.cluster.setMap(null);
-      this.cluster = null;
+    destroyCluster () {
+      this.cluster.setMap(null)
+      this.cluster = null
     },
-    getOption(key, defaultValue = false) {
-      return this.options[key] === undefined ? defaultValue : this.options[key];
+    getOption (key, defaultValue = false) {
+      return this.options[key] === undefined ? defaultValue : this.options[key]
     },
-    getDefaultStylingFunction() {
-      return function(clusterMarker, count) {
+    getDefaultStylingFunction () {
+      return function (clusterMarker, count) {
         clusterMarker
           .getElement()
-          .getElementsByTagName("div")[0].innerText = count;
-      };
+          .getElementsByTagName('div')[0].textContent = count
+      }
     },
     getDefaultIcons() {
       const customClass = this.getOption('class', 'cluster')
@@ -91,35 +92,35 @@ export default {
         {
           content: `<div style="${defaultStyles}background-color: #adffb3;" class="${customClass} lv1"></div>`,
           size: this.core.naver.maps.Size(40, 40),
-          anchor: this.core.naver.maps.Point(20, 20),
+          anchor: this.core.naver.maps.Point(20, 20)
         },
         {
           content: `<div style="${defaultStyles}background-color: #75ff7f;" class="${customClass} lv2"></div>`,
           size: this.core.naver.maps.Size(40, 40),
-          anchor: this.core.naver.maps.Point(20, 20),
+          anchor: this.core.naver.maps.Point(20, 20)
         },
         {
           content: `<div style="${defaultStyles}background-color: #1dff2d;" class="${customClass} lv3"></div>`,
           size: this.core.naver.maps.Size(40, 40),
-          anchor: this.core.naver.maps.Point(20, 20),
+          anchor: this.core.naver.maps.Point(20, 20)
         },
         {
           content: `<div style="${defaultStyles}background-color: #e7ff1d;" class="${customClass} lv4"></div>`,
           size: this.core.naver.maps.Size(40, 40),
-          anchor: this.core.naver.maps.Point(20, 20),
+          anchor: this.core.naver.maps.Point(20, 20)
         },
         {
           content: `<div style="${defaultStyles}background-color: #ffa51d;" class="${customClass} lv5"></div>`,
           size: this.core.naver.maps.Size(40, 40),
-          anchor: this.core.naver.maps.Point(20, 20),
-        },
-      ];
-    },
+          anchor: this.core.naver.maps.Point(20, 20)
+        }
+      ]
+    }
   },
-  render: function(createElement) {
+  render (createElement) {
     return createElement(
       'div',
       !this.loading ? this.$slots.default : null
-    );
+    )
   }
-};
+}

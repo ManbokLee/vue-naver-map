@@ -1,24 +1,26 @@
-import Vue from 'vue';
-import NaverMap from "./components/map";
-import NaverMapMarker from "./components/marker";
-import NaverMapMarkerCluster from "./components/cluster";
+import Vue from 'vue'
+import NaverMap from './components/map'
+import NaverMapMarker from './components/marker'
+import NaverMapMarkerCluster from './components/cluster'
 import { generateNaverInstance } from './utils'
 
-export { NaverMap, NaverMapMarker, NaverMapMarkerCluster };
+export { NaverMap, NaverMapMarker, NaverMapMarkerCluster }
 
-const navers = new Vue({ data: () => ({ 
-  key: null, 
-  libraries: [], 
-  options: {},
-  naver: null, 
-  clustering: null
-})})
+const navers = new Vue({
+  data: () => ({
+    key: null,
+    libraries: [],
+    options: {},
+    naver: null,
+    clustering: null
+  })
+})
 
-export function install(Vue, options = {}) {
+export function install (Vue, options = {}) {
   options = {
     installComponents: true,
-    ...options,
-  };
+    ...options
+  }
 
   Vue.prototype.$navers = navers
   navers.options = options
@@ -30,12 +32,12 @@ export function install(Vue, options = {}) {
   }
 
   if (options.installComponents) {
-    Vue.component("NaverMap", NaverMap);
-    Vue.component("NaverMapMarker", NaverMapMarker);
-    Vue.component("NaverMapMarkerCluster", NaverMapMarkerCluster);
+    Vue.component('NaverMap', NaverMap)
+    Vue.component('NaverMapMarker', NaverMapMarker)
+    Vue.component('NaverMapMarkerCluster', NaverMapMarkerCluster)
   }
 }
 
 export default {
-  install,
-};
+  install
+}

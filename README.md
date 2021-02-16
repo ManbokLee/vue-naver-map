@@ -194,7 +194,7 @@ export default {
 ```html
 <!-- in component -->
 <naver-map
-  ref="map"
+  ref="maps"
   :zoom="10"
   style="width: 100%; height: 100%;"
 >
@@ -203,8 +203,59 @@ export default {
 ```
 ```javascript
 // script
-const map = this.$refs.map.map
+const map = this.$refs.maps.map
 map.setScale(2)
+```
+
+### 특정 마커 찾아서 변환하기
+```html
+  <!-- in component -->
+  <naver-map
+    v-if="mapVisible"
+    ref="maps"
+    :zoom="10"
+    style="width: 100%; height: 100%;"
+  >
+    <naver-map-marker 
+      :options="markerOptions.imageIcon" 
+      @click="changeMarkerIcon(markerOptions.imageIcon)" 
+    />
+  </naver-map>
+```
+```javascript
+// script
+...
+data () {
+  return {
+    markerOptions: {
+      imageIcon: {
+        id: 777,
+        position: { lat: 37.2067362, lng: 126.9841624 },
+        icon: '/favicon.ico' 
+      },
+      html: {
+        icon: {
+          content: `<div class="marker-html">HM</div>`,
+          size: { width: 20, height: 20},
+          origin: { x:0, y:0 },
+          anchor: { x: 10, y: 20 }
+        } 
+      }
+    }
+  }
+},
+methdos: {
+  changeMarkerIcon(markerOption) {
+    const target = this.$refs.maps.map.getMarkerByKey(markerOption, 'id')
+    // available -> const target = this.$refs.maps.map.getMarkerByKey(markerOption) // 'id' is default key
+    if (target.icon === '/favicon.ico') {
+      target.setIcon(this.markerOptions.html.icon)
+    } else {
+      target.setIcon('/favicon.ico')
+    }
+  }
+}
+...
 ```
 
 
@@ -224,4 +275,5 @@ Naver map MarkerClustering.js (Apache License 2.0)
 2020.07.14 마커 옵션, 이벤트 바인딩 적용
 2020.07.16 라이브러리 호출을 위한 키와 서비스를 모듈 실행부분으로 변경(맵로딩하지 않아도 this.$navers.naver 으로 라이브러리 접근 가능)
 2020.07.16 맵 컴포넌트의 이벤트 바인딩 적용
+2020.10.05 maps ref에서 맵에 존재하는 marker를 특정할 수 있게 적용
 ```

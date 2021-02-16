@@ -2,12 +2,12 @@ export default {
   inject: {
     core: {
       type: Object,
-      required: true,
+      required: true
     },
     cluster: {
       type: [Object, Boolean],
-      default: false,
-    },
+      default: false
+    }
   },
   props: {
     options: {
@@ -15,50 +15,50 @@ export default {
       required: false,
       default: () => ({
         position: { lat: 37.3377362, lng: 126.9941624 }
-      }),
+      })
     }
   },
-  data() {
+  data () {
     return {
       marker: null,
       markerOptions: null
-    };
+    }
   },
-  created() {
-    this.createMarker();
+  created () {
+    this.createMarker()
   },
-  beforeDestroy() {
-    this.destroyMarker();
+  beforeDestroy () {
+    this.destroyMarker()
   },
   methods: {
-    createMarker() {
+    createMarker () {
       if (!this.core.map) {
-        throw new Error("Map loading is not finish.");
+        throw new Error('Map loading is not finish.')
       }
       if (this.cluster) {
-        this.insertCluster();
-        return;
+        this.insertCluster()
+        return
       }
       this.setMarker()
       this.marker.setMap(this.core.map)
-      this.registerEvent();
+      this.registerEvent()
     },
-    insertCluster() {
+    insertCluster () {
       this.setMarker()
       this.cluster.clustering.markers.push(this.marker)
       if (this.core.map._debounceThing) {
-        clearTimeout(this.core.map._debounceThing);
+        clearTimeout(this.core.map._debounceThing)
       }
-      this.core.map._debounceThing = setTimeout(this.redrawCluster, 100);
-      this.registerEvent();
+      this.core.map._debounceThing = setTimeout(this.redrawCluster, 100)
+      this.registerEvent()
     },
-    setMarker() {
+    setMarker () {
       this.markerOptions = { ...this.options }
       this.markerOptions.position = new this.core.naver.maps.LatLng(
         this.options.position.y || this.options.position.lat,
         this.options.position.x || this.options.position.lng
       )
-      Object.keys(this.options).forEach(option => {
+      Object.keys(this.options).forEach((option) => {
         if (typeof this.options[option] === 'object') {
           if (this.options[option].size) {
             this.markerOptions[option].size = this.core.naver.maps.Size(this.options[option].size.width, this.options[option].size.height)
@@ -83,22 +83,37 @@ export default {
       if (this.options.animation) {
         this.markerOptions.animation = this.core.naver.maps.Animation[this.options.animation]
       }
-      this.marker = new this.core.naver.maps.Marker(this.markerOptions);
+      this.marker = new this.core.naver.maps.Marker(this.markerOptions)
+      this.core.data.markers.push(this.marker)
     },
     registerEvent () {
-      Object.keys(this.$listeners).forEach(key => {
+      Object.keys(this.$listeners).forEach((key) => {
         this.core.naver.maps.Event.addListener(this.marker, key, this.$listeners[key])
-      });
+      })
     },
-    redrawCluster() {
-      this.cluster.clustering.setMap(this.cluster.clustering.getMap());
+    redrawCluster () {
+      this.cluster.clustering.setMap(this.cluster.clustering.getMap())
     },
-    destroyMarker() {
-      this.marker.setMap(null);
-      this.marker = null;
+    destroyMarker () {
+      if (this.cluster) {
+        this.removeMarkerInCluster()
+      }
+      this.core.data.markers = this.core.data.markers.filter(marker => marker !== this.marker)
+      this.marker.setMap(null)
+      this.marker = null
     },
+    removeMarkerInCluster () {
+      try {
+        if (this.cluster && this.cluster.clustering) {
+          this.cluster.clustering.markers = this.cluster.clustering.markers.filter(marker => marker !== this.marker)
+          this.redrawCluster()
+        }
+      } catch (error) {
+        //
+      }
+    }
   },
-  render() {
-    return;
-  },
-};
+  render () {
+    return null
+  }
+}
