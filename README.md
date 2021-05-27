@@ -95,7 +95,7 @@ Vue.use(VueNaverMap, {
   <naver-map-marker :options="markerOptions.animation" />
   <naver-map-marker :options="markerOptions.polygon" />
 
-  <naver-map-marker-cluster>
+  <naver-map-marker-cluster @click-cluster="handlerClickCluster">
     <naver-map-marker 
       v-for="n in 30"
       :key="n"
@@ -163,6 +163,11 @@ export default {
           }
         }
       }
+    }
+  },
+  methods: {
+    handlerClickCluster (markers) {
+      console.log(markers)
     }
   }
 };
@@ -276,4 +281,5 @@ Naver map MarkerClustering.js (Apache License 2.0)
 2020.07.16 라이브러리 호출을 위한 키와 서비스를 모듈 실행부분으로 변경(맵로딩하지 않아도 this.$navers.naver 으로 라이브러리 접근 가능)
 2020.07.16 맵 컴포넌트의 이벤트 바인딩 적용
 2020.10.05 maps ref에서 맵에 존재하는 marker를 특정할 수 있게 적용
+2021.05.27 클러스터 클릭 emit 추가
 ```

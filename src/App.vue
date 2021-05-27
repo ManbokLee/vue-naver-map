@@ -33,11 +33,12 @@
           <NaverMapMarker :options="markerOptions.animation" />
           <NaverMapMarker :options="markerOptions.polygon" />
 
-          <NaverMapMarkerCluster>
+          <NaverMapMarkerCluster @click-cluster="handlerClickCluster">
             <NaverMapMarker 
               v-for="n in 30"
               :key="n"
               :options="{
+                id: n,
                 position: { lat: (37.3 + n * 0.001), lng: 126.9641624 }  
               }"
             />
@@ -162,6 +163,9 @@ export default {
       } else {
         target.setIcon('/favicon.ico')
       }
+    },
+    handlerClickCluster(members) {
+      console.log('handlerClickCluster', members)
     }
   }
 };

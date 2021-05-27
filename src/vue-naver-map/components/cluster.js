@@ -20,7 +20,7 @@ export default {
       default: () => ({
         markers: [],
         minClusterSize: 1,
-        maxZoom: 17,
+        maxZoom: 22,
         disableClickZoom: false,
         gridSize: 120,
         class: 'cluster'
@@ -35,13 +35,13 @@ export default {
     }
   },
   created () {
-    this.loadcluster()
+    this.loadCluster()
   },
   beforeDestroy () {
     this.destroyCluster()
   },
   methods: {
-    async loadcluster () {
+    async loadCluster () {
       if (!this.core.map) {
         throw new Error('Map loading is not finish.')
       }
@@ -70,6 +70,8 @@ export default {
       })
       this.core.map.cluster = this.cluster
       this.loading = false
+      console.log(this.cluster)
+      // this.core.naver.maps.Event.addListener(this.cluster, 'click', this.handlerClick)
     },
     destroyCluster () {
       this.cluster.setMap(null)
@@ -79,10 +81,16 @@ export default {
       return this.options[key] === undefined ? defaultValue : this.options[key]
     },
     getDefaultStylingFunction () {
-      return function (clusterMarker, count) {
+      const vm = this
+      return function (clusterMarker, count, members) {
+        const closer = () => {
+          vm.$emit('click-cluster', members)
+        }
         clusterMarker
           .getElement()
           .getElementsByTagName('div')[0].textContent = count
+        clusterMarker
+          .getElement().addEventListener('click', closer)
       }
     },
     getDefaultIcons() {
@@ -115,6 +123,9 @@ export default {
           anchor: this.core.naver.maps.Point(20, 20)
         }
       ]
+    },
+    handlerClick () {
+      console.log(1)
     }
   },
   render (createElement) {

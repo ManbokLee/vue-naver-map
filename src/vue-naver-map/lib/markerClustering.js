@@ -328,7 +328,6 @@ naver.maps.Util.ClassExtend(MarkerClustering, naver.maps.OverlayView, {
 			if (!bounds.hasLatLng(position)) continue;
 
 			var	closestCluster = this._getClosestCluster(position);
-
 			closestCluster.addMarker(marker);
 
 			this._markerRelations.push(naver.maps.Event.addListener(marker, 'dragend', naver.maps.Util.bind(this._onDragEnd, this)));
@@ -601,7 +600,7 @@ Cluster.prototype = {
 	updateCount: function() {
 		var stylingFunction = this._markerClusterer.getStylingFunction();
 
-		stylingFunction && stylingFunction(this._clusterMarker, this.getCount());
+		stylingFunction && stylingFunction(this._clusterMarker, this.getCount(), this.getClusterMember());
 	},
 
 	/**
